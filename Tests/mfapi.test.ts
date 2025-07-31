@@ -1,7 +1,4 @@
-import request from 'supertest';
-import app from '../src/app';
 
-// Mock the mfaClient for testing
 const mockMfaClient = {
   login: jest.fn(),
   get2FALink: jest.fn(),
@@ -21,9 +18,10 @@ const mockMfaClient = {
   getUserDetails: jest.fn()
 };
 
-jest.mock('../src/index', () => ({
-  mfaClient: mockMfaClient
-}));
+jest.mock('../src/index', () => ({ mfaClient: mockMfaClient }));
+
+import request from 'supertest';
+import app from '../src/app';
 
 describe('MFAPI Proxy Server Tests', () => {
   beforeEach(() => {
