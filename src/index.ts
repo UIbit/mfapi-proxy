@@ -1,5 +1,280 @@
 import axios, { AxiosInstance } from 'axios';
 
+// ===== TYPE DEFINITIONS =====
+
+// Authentication Types
+export interface LoginCredentials {
+  username: string;
+  password: string;
+  [key: string]: any; // Allow additional fields
+}
+
+export interface TwoFALinkData {
+  userId: string;
+  email?: string;
+  phone?: string;
+  [key: string]: any;
+}
+
+// Mandate Types
+export interface MandateData {
+  userId: string;
+  mandateId?: string;
+  schemeCode?: string;
+  folioNumber?: string;
+  [key: string]: any;
+}
+
+export interface MandateListData {
+  userId: string;
+  page?: number;
+  limit?: number;
+  status?: string;
+  [key: string]: any;
+}
+
+export interface MandateRegisterData {
+  userId: string;
+  schemeCode: string;
+  folioNumber: string;
+  amount?: number;
+  frequency?: string;
+  startDate?: string;
+  [key: string]: any;
+}
+
+export interface MandateCSVData {
+  userId: string;
+  csvFile: string | Buffer;
+  [key: string]: any;
+}
+
+// Master Data Types
+export interface MasterSchemeListData {
+  userId: string;
+  category?: string;
+  [key: string]: any;
+}
+
+export interface NAVMasterListData {
+  userId: string;
+  schemeCode?: string;
+  date?: string;
+  [key: string]: any;
+}
+
+// NFT CAMS Types
+export interface NFTBankAccountData {
+  userId: string;
+  folioNumber: string;
+  bankAccountNumber: string;
+  bankName: string;
+  ifscCode: string;
+  [key: string]: any;
+}
+
+export interface NFTContactData {
+  userId: string;
+  folioNumber: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  [key: string]: any;
+}
+
+export interface NFTNomineeData {
+  userId: string;
+  folioNumber: string;
+  nomineeName: string;
+  nomineeRelation: string;
+  nomineePercentage: number;
+  [key: string]: any;
+}
+
+// Order Types
+export interface OrderData {
+  userId: string;
+  orderId?: string;
+  schemeCode?: string;
+  folioNumber?: string;
+  [key: string]: any;
+}
+
+export interface OrderListData {
+  userId: string;
+  page?: number;
+  limit?: number;
+  status?: string;
+  fromDate?: string;
+  toDate?: string;
+  [key: string]: any;
+}
+
+export interface NewOrderData {
+  userId: string;
+  schemeCode: string;
+  folioNumber: string;
+  amount: number;
+  orderType: 'PURCHASE' | 'REDEMPTION' | 'SWITCH';
+  [key: string]: any;
+}
+
+export interface UpdateOrderData {
+  userId: string;
+  orderId: string;
+  amount?: number;
+  status?: string;
+  [key: string]: any;
+}
+
+export interface PaymentDetailData {
+  userId: string;
+  orderId: string;
+  [key: string]: any;
+}
+
+export interface PaymentDetailListData {
+  userId: string;
+  page?: number;
+  limit?: number;
+  fromDate?: string;
+  toDate?: string;
+  [key: string]: any;
+}
+
+// Payment Gateway Types
+export interface ExchangePGServiceData {
+  userId: string;
+  schemeCode: string;
+  amount: number;
+  [key: string]: any;
+}
+
+export interface PaymentInfoData {
+  userId: string;
+  orderId: string;
+  paymentMethod: string;
+  paymentDetails: Record<string, any>;
+  [key: string]: any;
+}
+
+// Payment Manager Types
+export interface MISDetailData {
+  userId: string;
+  misId?: string;
+  fromDate?: string;
+  toDate?: string;
+  [key: string]: any;
+}
+
+export interface UploadMISData {
+  userId: string;
+  misFile: string | Buffer;
+  [key: string]: any;
+}
+
+// SXP (Systematic Orders) Types
+export interface SXPData {
+  userId: string;
+  sxpId?: string;
+  schemeCode?: string;
+  folioNumber?: string;
+  [key: string]: any;
+}
+
+export interface SXPListData {
+  userId: string;
+  page?: number;
+  limit?: number;
+  status?: string;
+  [key: string]: any;
+}
+
+export interface SXPHistoryData {
+  userId: string;
+  sxpId: string;
+  fromDate?: string;
+  toDate?: string;
+  [key: string]: any;
+}
+
+export interface RegisterSXPData {
+  userId: string;
+  schemeCode: string;
+  folioNumber: string;
+  amount: number;
+  frequency: string;
+  startDate: string;
+  endDate?: string;
+  [key: string]: any;
+}
+
+export interface SXPPauseData {
+  userId: string;
+  sxpId: string;
+  pauseReason?: string;
+  [key: string]: any;
+}
+
+export interface SXPTopupData {
+  userId: string;
+  sxpId: string;
+  topupAmount: number;
+  [key: string]: any;
+}
+
+export interface SXPCSVData {
+  userId: string;
+  csvFile: string | Buffer;
+  [key: string]: any;
+}
+
+// UCC Types
+export interface UCCData {
+  userId: string;
+  uccId?: string;
+  folioNumber?: string;
+  [key: string]: any;
+}
+
+export interface UCCListData {
+  userId: string;
+  page?: number;
+  limit?: number;
+  status?: string;
+  [key: string]: any;
+}
+
+export interface AddUCCData {
+  userId: string;
+  folioNumber: string;
+  schemeCode: string;
+  holdingNature: string;
+  [key: string]: any;
+}
+
+export interface UpdateUCCData {
+  userId: string;
+  uccId: string;
+  holdingNature?: string;
+  status?: string;
+  [key: string]: any;
+}
+
+export interface UCCCSVData {
+  userId: string;
+  csvFile: string | Buffer;
+  [key: string]: any;
+}
+
+export interface UCC2FAResendData {
+  userId: string;
+  uccId: string;
+  email?: string;
+  phone?: string;
+  [key: string]: any;
+}
+
 export class Mfapiclient {
   private axiosInstance: AxiosInstance;
 
@@ -15,228 +290,228 @@ export class Mfapiclient {
   }
 
   // ===== ACCESS TOKEN API =====
-  async login(credentials: any) {
+  async login(credentials: LoginCredentials) {
     const response = await this.axiosInstance.post('/login', credentials);
     return response.data;
   }
 
   // ===== CLASS 2FA API =====
-  async get2FALink(data: any) {
+  async get2FALink(data: TwoFALinkData) {
     const response = await this.axiosInstance.post('/v2/get2faLink', data);
     return response.data;
   }
 
   // ===== MANDATE API =====
-  async linkMandate(data: any) {
+  async linkMandate(data: MandateData) {
     const response = await this.axiosInstance.post('/mandate/link', data);
     return response.data;
   }
 
-  async cancelMandate(data: any) {
+  async cancelMandate(data: MandateData) {
     const response = await this.axiosInstance.post('/mandate/cancel', data);
     return response.data;
   }
 
-  async delinkMandate(data: any) {
+  async delinkMandate(data: MandateData) {
     const response = await this.axiosInstance.post('/mandate/delink', data);
     return response.data;
   }
 
-  async getMandate(data: any) {
+  async getMandate(data: MandateData) {
     const response = await this.axiosInstance.post('/mandate/get', data);
     return response.data;
   }
 
-  async listMandates(data: any) {
+  async listMandates(data: MandateListData) {
     const response = await this.axiosInstance.post('/mandate/list', data);
     return response.data;
   }
 
-  async updateMandate(data: any) {
+  async updateMandate(data: MandateData) {
     const response = await this.axiosInstance.post('/mandate/update', data);
     return response.data;
   }
 
   // ===== MANDATE REGISTER API =====
-  async registerMandate(data: any) {
+  async registerMandate(data: MandateRegisterData) {
     const response = await this.axiosInstance.post('/mandate/register', data);
     return response.data;
   }
 
-  async registerMandateCSV(data: any) {
+  async registerMandateCSV(data: MandateCSVData) {
     const response = await this.axiosInstance.post('/mandate/register/csv', data);
     return response.data;
   }
 
   // ===== MASTER SCHEME LIST API =====
-  async getMasterSchemeList(data: any) {
+  async getMasterSchemeList(data: MasterSchemeListData) {
     const response = await this.axiosInstance.post('/masterSchemeList', data);
     return response.data;
   }
 
   // ===== NAV API =====
-  async getNAVMasterList(data: any) {
+  async getNAVMasterList(data: NAVMasterListData) {
     const response = await this.axiosInstance.post('/nav/masterList', data);
     return response.data;
   }
 
   // ===== NFT CAMS API =====
-  async changeNFTBankAccount(data: any) {
+  async changeNFTBankAccount(data: NFTBankAccountData) {
     const response = await this.axiosInstance.post('/nft/bankAccountChange', data);
     return response.data;
   }
 
-  async changeNFTContact(data: any) {
+  async changeNFTContact(data: NFTContactData) {
     const response = await this.axiosInstance.post('/nft/contactChange', data);
     return response.data;
   }
 
-  async changeNFTNominee(data: any) {
+  async changeNFTNominee(data: NFTNomineeData) {
     const response = await this.axiosInstance.post('/nft/nomineeChange', data);
     return response.data;
   }
 
   // ===== ORDER MANAGER API =====
-  async getPaymentDetail(data: any) {
+  async getPaymentDetail(data: PaymentDetailData) {
     const response = await this.axiosInstance.post('/order/getPaymentDetail', data);
     return response.data;
   }
 
-  async listPaymentDetails(data: any) {
+  async listPaymentDetails(data: PaymentDetailListData) {
     const response = await this.axiosInstance.post('/order/listPaymentDetail', data);
     return response.data;
   }
 
-  async cancelOrder(data: any) {
+  async cancelOrder(data: OrderData) {
     const response = await this.axiosInstance.post('/order/cancel', data);
     return response.data;
   }
 
-  async getOrder(data: any) {
+  async getOrder(data: OrderData) {
     const response = await this.axiosInstance.post('/order/get', data);
     return response.data;
   }
 
-  async listOrders(data: any) {
+  async listOrders(data: OrderListData) {
     const response = await this.axiosInstance.post('/order/list', data);
     return response.data;
   }
 
   // ===== ORDER MANAGER ORDER NEW API =====
-  async createNewOrder(data: any) {
+  async createNewOrder(data: NewOrderData) {
     const response = await this.axiosInstance.post('/order/new', data);
     return response.data;
   }
 
   // ===== ORDER MANAGER ORDER UPDATE API =====
-  async updateOrder(data: any) {
+  async updateOrder(data: UpdateOrderData) {
     const response = await this.axiosInstance.post('/order/update', data);
     return response.data;
   }
 
   // ===== PAYMENT GATEWAY API =====
-  async getExchangePGService(data: any) {
+  async getExchangePGService(data: ExchangePGServiceData) {
     const response = await this.axiosInstance.post('/payment/getExchpgService', data);
     return response.data;
   }
 
-  async sendPaymentInfo(data: any) {
+  async sendPaymentInfo(data: PaymentInfoData) {
     const response = await this.axiosInstance.post('/payment/sendPaymentInfo', data);
     return response.data;
   }
 
   // ===== PAYMENT MANAGER API =====
-  async getMISDetail(data: any) {
+  async getMISDetail(data: MISDetailData) {
     const response = await this.axiosInstance.post('/payment/getMisDetail', data);
     return response.data;
   }
 
-  async uploadMIS(data: any) {
+  async uploadMIS(data: UploadMISData) {
     const response = await this.axiosInstance.post('/payment/uploadMis', data);
     return response.data;
   }
 
   // ===== SYSTEMATIC ORDERS ENGINE API =====
-  async cancelSXP(data: any) {
+  async cancelSXP(data: SXPData) {
     const response = await this.axiosInstance.post('/sxp/cancel', data);
     return response.data;
   }
 
-  async getSXPHistory(data: any) {
+  async getSXPHistory(data: SXPHistoryData) {
     const response = await this.axiosInstance.post('/sxp/getHistory', data);
     return response.data;
   }
 
-  async getSXP(data: any) {
+  async getSXP(data: SXPData) {
     const response = await this.axiosInstance.post('/sxp/get', data);
     return response.data;
   }
 
-  async listSXP(data: any) {
+  async listSXP(data: SXPListData) {
     const response = await this.axiosInstance.post('/sxp/list', data);
     return response.data;
   }
 
-  async resumeSXP(data: any) {
+  async resumeSXP(data: SXPData) {
     const response = await this.axiosInstance.post('/sxp/resume', data);
     return response.data;
   }
 
-  async setSXPPause(data: any) {
+  async setSXPPause(data: SXPPauseData) {
     const response = await this.axiosInstance.post('/sxp/setPause', data);
     return response.data;
   }
 
-  async topupSXP(data: any) {
+  async topupSXP(data: SXPTopupData) {
     const response = await this.axiosInstance.post('/sxp/topup', data);
     return response.data;
   }
 
   // ===== SYSTEMATIC ORDERS ENGINE SXP REGISTER API =====
-  async registerSXP(data: any) {
+  async registerSXP(data: RegisterSXPData) {
     const response = await this.axiosInstance.post('/sxp/register', data);
     return response.data;
   }
 
   // ===== SYSTEMATIC ORDERS ENGINE SXP REGISTER CSV API =====
-  async registerSXPCSV(data: any) {
+  async registerSXPCSV(data: SXPCSVData) {
     const response = await this.axiosInstance.post('/sxp/register/csv', data);
     return response.data;
   }
 
   // ===== UCC 2FA RESEND LINK API =====
-  async resendUCC2FALink(data: any) {
+  async resendUCC2FALink(data: UCC2FAResendData) {
     const response = await this.axiosInstance.post('/ucc/2faResendLink', data);
     return response.data;
   }
 
   // ===== UCC ADD UCC ADD UCC CSV API =====
-  async runUCCCSV(data: any) {
+  async runUCCCSV(data: UCCCSVData) {
     const response = await this.axiosInstance.post('/ucc/csvRunner', data);
     return response.data;
   }
 
   // ===== UCC DEACTIVATE UCC API =====
-  async updateUCC(data: any) {
+  async updateUCC(data: UpdateUCCData) {
     const response = await this.axiosInstance.post('/ucc/v2/updateUcc', data);
     return response.data;
   }
 
   // ===== UCC GET UCC API =====
-  async getUCC(data: any, contentType?: string) {
+  async getUCC(data: UCCData, contentType?: string) {
     const headers = contentType ? { 'Content-Type': contentType } : {};
     const response = await this.axiosInstance.post('/ucc/v2/getUcc', data, { headers });
     return response.data;
   }
 
   // ===== UCC LIST UCC API =====
-  async listUCC(data: any) {
+  async listUCC(data: UCCListData) {
     const response = await this.axiosInstance.post('/ucc/v2/listUcc', data);
     return response.data;
   }
 
   // ===== UCC UPDATE UCC UPDATE HOLDING NATURE API =====
-  async addUCC(data: any) {
+  async addUCC(data: AddUCCData) {
     const response = await this.axiosInstance.post('/ucc/v2/addUcc', data);
     return response.data;
   }
