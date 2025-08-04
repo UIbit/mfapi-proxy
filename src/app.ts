@@ -122,6 +122,86 @@ app.post('/mandate/register/csv', async (req, res) => {
 // ===== MASTER SCHEME LIST API =====
 app.post('/masterSchemeList', async (req, res) => {
   try {
+    // Validate required fields
+    if (!req.body.userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId is required'
+      });
+    }
+
+    // Validate optional fields
+    const { 
+      userId, 
+      category, 
+      schemeCode, 
+      schemeName, 
+      fundHouse, 
+      fundType, 
+      page, 
+      limit, 
+      sortBy, 
+      sortOrder, 
+      status, 
+      minNav, 
+      maxNav, 
+      fundManager, 
+      isin 
+    } = req.body;
+
+    // Validate sortBy if provided
+    if (sortBy && !['name', 'code', 'category', 'nav', 'launchDate'].includes(sortBy)) {
+      return res.status(400).json({
+        success: false,
+        message: 'sortBy must be one of: name, code, category, nav, launchDate'
+      });
+    }
+
+    // Validate sortOrder if provided
+    if (sortOrder && !['asc', 'desc'].includes(sortOrder)) {
+      return res.status(400).json({
+        success: false,
+        message: 'sortOrder must be one of: asc, desc'
+      });
+    }
+
+    // Validate status if provided
+    if (status && !['active', 'inactive', 'all'].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: 'status must be one of: active, inactive, all'
+      });
+    }
+
+    // Validate numeric fields
+    if (page && (typeof page !== 'number' || page < 1)) {
+      return res.status(400).json({
+        success: false,
+        message: 'page must be a positive number'
+      });
+    }
+
+    if (limit && (typeof limit !== 'number' || limit < 1 || limit > 100)) {
+      return res.status(400).json({
+        success: false,
+        message: 'limit must be a number between 1 and 100'
+      });
+    }
+
+    if (minNav && (typeof minNav !== 'number' || minNav < 0)) {
+      return res.status(400).json({
+        success: false,
+        message: 'minNav must be a non-negative number'
+      });
+    }
+
+    if (maxNav && (typeof maxNav !== 'number' || maxNav < 0)) {
+      return res.status(400).json({
+        success: false,
+        message: 'maxNav must be a non-negative number'
+      });
+    }
+
     const data = await mfaClient.getMasterSchemeList(req.body);
     res.json(data);
   } catch (error: any) {

@@ -53,7 +53,48 @@ export interface MandateCSVData {
 export interface MasterSchemeListData {
   userId: string;
   category?: string;
-  [key: string]: any;
+  schemeCode?: string;
+  schemeName?: string;
+  fundHouse?: string;
+  fundType?: string;
+  page?: number;
+  limit?: number;
+  sortBy?: 'name' | 'code' | 'category' | 'nav' | 'launchDate';
+  sortOrder?: 'asc' | 'desc';
+  status?: 'active' | 'inactive' | 'all';
+  minNav?: number;
+  maxNav?: number;
+  fundManager?: string;
+  isin?: string;
+}
+
+export interface MasterSchemeResponse {
+  success: boolean;
+  schemes: Array<{
+    code: string;
+    name: string;
+    category: string;
+    fundHouse?: string;
+    fundType?: string;
+    isin?: string;
+    amcCode?: string;
+    schemeType?: string;
+    nav?: number;
+    navDate?: string;
+    minInvestment?: number;
+    maxInvestment?: number;
+    exitLoad?: string;
+    expenseRatio?: number;
+    fundManager?: string;
+    launchDate?: string;
+    status?: string;
+  }>;
+  total: number;
+  message?: string;
+  page?: number;
+  limit?: number;
+  hasNext?: boolean;
+  hasPrevious?: boolean;
 }
 
 export interface NAVMasterListData {
@@ -344,7 +385,7 @@ export class Mfapiclient {
   }
 
   // ===== MASTER SCHEME LIST API =====
-  async getMasterSchemeList(data: MasterSchemeListData) {
+  async getMasterSchemeList(data: MasterSchemeListData): Promise<MasterSchemeResponse> {
     const response = await this.axiosInstance.post('/masterSchemeList', data);
     return response.data;
   }
