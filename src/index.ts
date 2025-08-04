@@ -199,6 +199,34 @@ export interface PaymentInfoData {
   [key: string]: any;
 }
 
+// Payment Aggregator Types
+export interface PaymentAggregatorData {
+  userId: string;
+  schemeCode: string;
+  amount: number;
+  paymentMethod: string;
+  aggregatorType: string;
+  [key: string]: any;
+}
+
+export interface SinglePaymentBSEPGData {
+  userId: string;
+  orderId: string;
+  amount: number;
+  paymentMethod: string;
+  paymentDetails: Record<string, any>;
+  [key: string]: any;
+}
+
+export interface SendPaymentInfoBSEPGData {
+  userId: string;
+  orderId: string;
+  paymentStatus: string;
+  transactionId?: string;
+  paymentDetails: Record<string, any>;
+  [key: string]: any;
+}
+
 // Payment Manager Types
 export interface MISDetailData {
   userId: string;
@@ -458,6 +486,23 @@ export class Mfapiclient {
 
   async sendPaymentInfo(data: PaymentInfoData) {
     const response = await this.axiosInstance.post('/payment/sendPaymentInfo', data);
+    return response.data;
+  }
+
+  // ===== PAYMENT AGGREGATOR API =====
+  async processPaymentAggregator(data: PaymentAggregatorData) {
+    const response = await this.axiosInstance.post('/payment/aggregator', data);
+    return response.data;
+  }
+
+  // ===== BSE PAYMENT GATEWAY API =====
+  async requestSinglePaymentBSEPG(data: SinglePaymentBSEPGData) {
+    const response = await this.axiosInstance.post('/payment/bse/single', data);
+    return response.data;
+  }
+
+  async sendPaymentInfoBSEPG(data: SendPaymentInfoBSEPGData) {
+    const response = await this.axiosInstance.post('/payment/bse/sendInfo', data);
     return response.data;
   }
 

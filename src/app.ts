@@ -332,6 +332,35 @@ app.post('/payment/sendPaymentInfo', async (req, res) => {
   }
 });
 
+// ===== PAYMENT AGGREGATOR API =====
+app.post('/payment/aggregator', async (req, res) => {
+  try {
+    const data = await mfaClient.processPaymentAggregator(req.body);
+    res.json(data);
+  } catch (error: any) {
+    handleApiError(error, res);
+  }
+});
+
+// ===== BSE PAYMENT GATEWAY API =====
+app.post('/payment/bse/single', async (req, res) => {
+  try {
+    const data = await mfaClient.requestSinglePaymentBSEPG(req.body);
+    res.json(data);
+  } catch (error: any) {
+    handleApiError(error, res);
+  }
+});
+
+app.post('/payment/bse/sendInfo', async (req, res) => {
+  try {
+    const data = await mfaClient.sendPaymentInfoBSEPG(req.body);
+    res.json(data);
+  } catch (error: any) {
+    handleApiError(error, res);
+  }
+});
+
 // ===== PAYMENT MANAGER API =====
 app.post('/payment/getMisDetail', async (req, res) => {
   try {
@@ -529,6 +558,9 @@ app.get('/api-docs', (_req, res) => {
       'POST /order/update': 'Update Order',
       'POST /payment/getExchpgService': 'Get Exchange PG Service',
       'POST /payment/sendPaymentInfo': 'Send Payment Info',
+      'POST /payment/aggregator': 'Payment Aggregator',
+      'POST /payment/bse/single': 'Request Single Payment BSE PG',
+      'POST /payment/bse/sendInfo': 'Send Payment Info BSE PG',
       'POST /payment/getMisDetail': 'Get MIS Detail',
       'POST /payment/uploadMis': 'Upload MIS',
       'POST /sxp/cancel': 'Cancel SXP',

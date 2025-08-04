@@ -35,6 +35,9 @@ const mockMfaClient = {
   // Payment Gateway APIs
   getExchangePGService: jest.fn(),
   sendPaymentInfo: jest.fn(),
+  processPaymentAggregator: jest.fn(),
+  requestSinglePaymentBSEPG: jest.fn(),
+  sendPaymentInfoBSEPG: jest.fn(),
   
   // Payment Manager APIs
   getMISDetail: jest.fn(),
