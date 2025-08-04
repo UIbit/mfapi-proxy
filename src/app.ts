@@ -20,23 +20,79 @@ const handleApiError = (error: any, res: express.Response) => {
 // ===== ACCESS TOKEN API =====
 app.post('/login', async (req, res) => {
   try {
-    // Call the centralized client method
+    // Validate required fields
+    if (!req.body.userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId is required'
+      });
+    }
+
+    if (!req.body.password) {
+      return res.status(400).json({
+        success: false,
+        message: 'password is required'
+      });
+    }
+
+    // Validate optional fields
+    const {
+      userId,
+      password,
+      source,
+      deviceId,
+      deviceType
+    } = req.body;
+
+    // Validate source if provided
+    if (source && !['web', 'mobile', 'api'].includes(source)) {
+      return res.status(400).json({
+        success: false,
+        message: 'source must be one of: web, mobile, api'
+      });
+    }
+
+    // Validate deviceType if provided
+    if (deviceType && !['android', 'ios', 'web', 'desktop'].includes(deviceType)) {
+      return res.status(400).json({
+        success: false,
+        message: 'deviceType must be one of: android, ios, web, desktop'
+      });
+    }
+
     const data = await mfaClient.login(req.body);
-    // Return the response from the API to the client
     res.json(data);
   } catch (error: any) {
-    // Handle errors: show underlying API error response, or just the message
-    if (error.response) {
-      res.status(error.response.status || 500).json(error.response.data);
-    } else {
-      res.status(500).json({ error: error.message });
-    }
+    handleApiError(error, res);
   }
 });
 
 // ===== CLASS 2FA API =====
 app.post('/v2/get2faLink', async (req, res) => {
   try {
+    // Validate required fields
+    if (!req.body.userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId is required'
+      });
+    }
+
+    // Validate optional fields
+    const {
+      userId,
+      source,
+      deviceId
+    } = req.body;
+
+    // Validate source if provided
+    if (source && !['web', 'mobile', 'api'].includes(source)) {
+      return res.status(400).json({
+        success: false,
+        message: 'source must be one of: web, mobile, api'
+      });
+    }
+
     const data = await mfaClient.get2FALink(req.body);
     res.json(data);
   } catch (error: any) {
@@ -47,6 +103,36 @@ app.post('/v2/get2faLink', async (req, res) => {
 // ===== MANDATE API =====
 app.post('/mandate/link', async (req, res) => {
   try {
+    // Validate required fields
+    if (!req.body.userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId is required'
+      });
+    }
+
+    if (!req.body.mandateId) {
+      return res.status(400).json({
+        success: false,
+        message: 'mandateId is required'
+      });
+    }
+
+    // Validate optional fields
+    const {
+      userId,
+      mandateId,
+      source
+    } = req.body;
+
+    // Validate source if provided
+    if (source && !['web', 'mobile', 'api'].includes(source)) {
+      return res.status(400).json({
+        success: false,
+        message: 'source must be one of: web, mobile, api'
+      });
+    }
+
     const data = await mfaClient.linkMandate(req.body);
     res.json(data);
   } catch (error: any) {
@@ -56,6 +142,37 @@ app.post('/mandate/link', async (req, res) => {
 
 app.post('/mandate/cancel', async (req, res) => {
   try {
+    // Validate required fields
+    if (!req.body.userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId is required'
+      });
+    }
+
+    if (!req.body.mandateId) {
+      return res.status(400).json({
+        success: false,
+        message: 'mandateId is required'
+      });
+    }
+
+    // Validate optional fields
+    const {
+      userId,
+      mandateId,
+      reason,
+      source
+    } = req.body;
+
+    // Validate source if provided
+    if (source && !['web', 'mobile', 'api'].includes(source)) {
+      return res.status(400).json({
+        success: false,
+        message: 'source must be one of: web, mobile, api'
+      });
+    }
+
     const data = await mfaClient.cancelMandate(req.body);
     res.json(data);
   } catch (error: any) {
@@ -65,6 +182,36 @@ app.post('/mandate/cancel', async (req, res) => {
 
 app.post('/mandate/delink', async (req, res) => {
   try {
+    // Validate required fields
+    if (!req.body.userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId is required'
+      });
+    }
+
+    if (!req.body.mandateId) {
+      return res.status(400).json({
+        success: false,
+        message: 'mandateId is required'
+      });
+    }
+
+    // Validate optional fields
+    const {
+      userId,
+      mandateId,
+      source
+    } = req.body;
+
+    // Validate source if provided
+    if (source && !['web', 'mobile', 'api'].includes(source)) {
+      return res.status(400).json({
+        success: false,
+        message: 'source must be one of: web, mobile, api'
+      });
+    }
+
     const data = await mfaClient.delinkMandate(req.body);
     res.json(data);
   } catch (error: any) {
@@ -74,6 +221,36 @@ app.post('/mandate/delink', async (req, res) => {
 
 app.post('/mandate/get', async (req, res) => {
   try {
+    // Validate required fields
+    if (!req.body.userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId is required'
+      });
+    }
+
+    if (!req.body.mandateId) {
+      return res.status(400).json({
+        success: false,
+        message: 'mandateId is required'
+      });
+    }
+
+    // Validate optional fields
+    const {
+      userId,
+      mandateId,
+      source
+    } = req.body;
+
+    // Validate source if provided
+    if (source && !['web', 'mobile', 'api'].includes(source)) {
+      return res.status(400).json({
+        success: false,
+        message: 'source must be one of: web, mobile, api'
+      });
+    }
+
     const data = await mfaClient.getMandate(req.body);
     res.json(data);
   } catch (error: any) {
@@ -83,6 +260,72 @@ app.post('/mandate/get', async (req, res) => {
 
 app.post('/mandate/list', async (req, res) => {
   try {
+    // Validate required fields
+    if (!req.body.userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId is required'
+      });
+    }
+
+    // Validate optional fields
+    const {
+      userId,
+      status,
+      page,
+      limit,
+      sortBy,
+      sortOrder,
+      source
+    } = req.body;
+
+    // Validate status if provided
+    if (status && !['active', 'inactive', 'cancelled', 'all'].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: 'status must be one of: active, inactive, cancelled, all'
+      });
+    }
+
+    // Validate sortBy if provided
+    if (sortBy && !['createdDate', 'mandateId', 'status'].includes(sortBy)) {
+      return res.status(400).json({
+        success: false,
+        message: 'sortBy must be one of: createdDate, mandateId, status'
+      });
+    }
+
+    // Validate sortOrder if provided
+    if (sortOrder && !['asc', 'desc'].includes(sortOrder)) {
+      return res.status(400).json({
+        success: false,
+        message: 'sortOrder must be one of: asc, desc'
+      });
+    }
+
+    // Validate numeric fields
+    if (page && (typeof page !== 'number' || page < 1)) {
+      return res.status(400).json({
+        success: false,
+        message: 'page must be a positive number'
+      });
+    }
+
+    if (limit && (typeof limit !== 'number' || limit < 1 || limit > 100)) {
+      return res.status(400).json({
+        success: false,
+        message: 'limit must be a number between 1 and 100'
+      });
+    }
+
+    // Validate source if provided
+    if (source && !['web', 'mobile', 'api'].includes(source)) {
+      return res.status(400).json({
+        success: false,
+        message: 'source must be one of: web, mobile, api'
+      });
+    }
+
     const data = await mfaClient.listMandates(req.body);
     res.json(data);
   } catch (error: any) {
@@ -92,6 +335,56 @@ app.post('/mandate/list', async (req, res) => {
 
 app.post('/mandate/update', async (req, res) => {
   try {
+    // Validate required fields
+    if (!req.body.userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId is required'
+      });
+    }
+
+    if (!req.body.mandateId) {
+      return res.status(400).json({
+        success: false,
+        message: 'mandateId is required'
+      });
+    }
+
+    // Validate optional fields
+    const {
+      userId,
+      mandateId,
+      amount,
+      frequency,
+      startDate,
+      endDate,
+      source
+    } = req.body;
+
+    // Validate frequency if provided
+    if (frequency && !['daily', 'weekly', 'monthly', 'quarterly', 'yearly'].includes(frequency)) {
+      return res.status(400).json({
+        success: false,
+        message: 'frequency must be one of: daily, weekly, monthly, quarterly, yearly'
+      });
+    }
+
+    // Validate numeric fields
+    if (amount && (typeof amount !== 'number' || amount <= 0)) {
+      return res.status(400).json({
+        success: false,
+        message: 'amount must be a positive number'
+      });
+    }
+
+    // Validate source if provided
+    if (source && !['web', 'mobile', 'api'].includes(source)) {
+      return res.status(400).json({
+        success: false,
+        message: 'source must be one of: web, mobile, api'
+      });
+    }
+
     const data = await mfaClient.updateMandate(req.body);
     res.json(data);
   } catch (error: any) {
@@ -102,6 +395,70 @@ app.post('/mandate/update', async (req, res) => {
 // ===== MANDATE REGISTER API =====
 app.post('/mandate/register', async (req, res) => {
   try {
+    // Validate required fields
+    if (!req.body.userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId is required'
+      });
+    }
+
+    if (!req.body.schemeCode) {
+      return res.status(400).json({
+        success: false,
+        message: 'schemeCode is required'
+      });
+    }
+
+    if (!req.body.amount) {
+      return res.status(400).json({
+        success: false,
+        message: 'amount is required'
+      });
+    }
+
+    if (!req.body.frequency) {
+      return res.status(400).json({
+        success: false,
+        message: 'frequency is required'
+      });
+    }
+
+    // Validate optional fields
+    const {
+      userId,
+      schemeCode,
+      amount,
+      frequency,
+      startDate,
+      endDate,
+      source
+    } = req.body;
+
+    // Validate frequency
+    if (!['daily', 'weekly', 'monthly', 'quarterly', 'yearly'].includes(frequency)) {
+      return res.status(400).json({
+        success: false,
+        message: 'frequency must be one of: daily, weekly, monthly, quarterly, yearly'
+      });
+    }
+
+    // Validate numeric fields
+    if (typeof amount !== 'number' || amount <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'amount must be a positive number'
+      });
+    }
+
+    // Validate source if provided
+    if (source && !['web', 'mobile', 'api'].includes(source)) {
+      return res.status(400).json({
+        success: false,
+        message: 'source must be one of: web, mobile, api'
+      });
+    }
+
     const data = await mfaClient.registerMandate(req.body);
     res.json(data);
   } catch (error: any) {
@@ -112,6 +469,44 @@ app.post('/mandate/register', async (req, res) => {
 // ===== MANDATE REGISTER CSV API =====
 app.post('/mandate/register/csv', async (req, res) => {
   try {
+    // Validate required fields
+    if (!req.body.userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId is required'
+      });
+    }
+
+    if (!req.body.csvData) {
+      return res.status(400).json({
+        success: false,
+        message: 'csvData is required'
+      });
+    }
+
+    // Validate optional fields
+    const {
+      userId,
+      csvData,
+      source
+    } = req.body;
+
+    // Validate csvData is an array
+    if (!Array.isArray(csvData)) {
+      return res.status(400).json({
+        success: false,
+        message: 'csvData must be an array'
+      });
+    }
+
+    // Validate source if provided
+    if (source && !['web', 'mobile', 'api'].includes(source)) {
+      return res.status(400).json({
+        success: false,
+        message: 'source must be one of: web, mobile, api'
+      });
+    }
+
     const data = await mfaClient.registerMandateCSV(req.body);
     res.json(data);
   } catch (error: any) {
@@ -212,6 +607,65 @@ app.post('/masterSchemeList', async (req, res) => {
 // ===== NAV API =====
 app.post('/nav/masterList', async (req, res) => {
   try {
+    // Validate required fields
+    if (!req.body.userId) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId is required'
+      });
+    }
+
+    // Validate optional fields
+    const {
+      userId,
+      schemeCode,
+      date,
+      page,
+      limit,
+      sortBy,
+      sortOrder,
+      source
+    } = req.body;
+
+    // Validate sortBy if provided
+    if (sortBy && !['schemeCode', 'navDate', 'nav'].includes(sortBy)) {
+      return res.status(400).json({
+        success: false,
+        message: 'sortBy must be one of: schemeCode, navDate, nav'
+      });
+    }
+
+    // Validate sortOrder if provided
+    if (sortOrder && !['asc', 'desc'].includes(sortOrder)) {
+      return res.status(400).json({
+        success: false,
+        message: 'sortOrder must be one of: asc, desc'
+      });
+    }
+
+    // Validate numeric fields
+    if (page && (typeof page !== 'number' || page < 1)) {
+      return res.status(400).json({
+        success: false,
+        message: 'page must be a positive number'
+      });
+    }
+
+    if (limit && (typeof limit !== 'number' || limit < 1 || limit > 100)) {
+      return res.status(400).json({
+        success: false,
+        message: 'limit must be a number between 1 and 100'
+      });
+    }
+
+    // Validate source if provided
+    if (source && !['web', 'mobile', 'api'].includes(source)) {
+      return res.status(400).json({
+        success: false,
+        message: 'source must be one of: web, mobile, api'
+      });
+    }
+
     const data = await mfaClient.getNAVMasterList(req.body);
     res.json(data);
   } catch (error: any) {
