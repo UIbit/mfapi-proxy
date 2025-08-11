@@ -5,16 +5,28 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "dev": "ts-node-dev --respawn --transpile-only src/main.ts",
+    "start": "node dist/main.js",
+    "build": "tsc",
+    "start:dev": "ts-node-dev --respawn --transpile-only src/main.ts",
+    "start:debug": "ts-node-dev --respawn --transpile-only --inspect src/main.ts",
+    "start:prod": "node dist/main.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@nestjs/common": "^11.1.6",
+    "@nestjs/core": "^11.1.6",
+    "@nestjs/platform-express": "^11.1.6",
     "axios": "^1.11.0",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "pdf-parse": "^1.1.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
     "swagger-js-codegen": "^1.13.0"
   },
   "devDependencies": {
