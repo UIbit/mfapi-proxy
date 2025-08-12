@@ -71,7 +71,7 @@ src/
 
 ### UCC (Unique Client Code)
 - `POST /ucc/resend2fa` - Resend UCC 2FA link
-- `POST /ucc/csv` - Process UCC CSV
+- `POST /ucc/csv` - Process UCC CSV 
 - `POST /ucc/update` - Update UCC
 - `POST /ucc/get` - Get UCC details
 - `POST /ucc/list` - List UCC
